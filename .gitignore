@@ -1,0 +1,34 @@
+# OS/editor artifacts
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Runtime outputs and collected data
+datasets/
+sessions/
+models/
+logs/
+*.log
+*.npz
+*.joblib
+*.confusion.png
+
+# Local binary/course artifacts
+*.pptx
+~$*
+
+# Downloaded/generated SDK documentation bundle
+xWRL6432 MMWAVE-L-SDK_ Mmwave Demo_files/
