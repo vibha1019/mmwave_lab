@@ -112,11 +112,9 @@ def update_background(
     alpha: float,
 ) -> np.ndarray:
     """Update the background with an exponential moving average."""
-    # TODO: implement the exponential background update:
-    # new_background = (1 - alpha) * background + alpha * profile
-    # Try several alpha values and explain the tradeoff.
-    raise NotImplementedError("TODO: implement exponential background update.")
+    new_background = (1 - alpha) * background + alpha * profile
 
+    return new_background
 
 def estimate_motion_target(
     motion: np.ndarray,
