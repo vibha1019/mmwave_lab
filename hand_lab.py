@@ -45,11 +45,24 @@ def estimate_distance(
 
     if len(window) == 0:
         return None, difference
+    # Find strongest peak in valid range window
+    peak_index = int(np.argmax(window))
+    peak_strength = window[peak_index]
 
-    # TODO: find the strongest peak inside window.
-    # TODO: reject weak peaks using peak_ratio and a typical window level.
-    # TODO: convert the peak bin index to meters using bin_spacing_m.
-    raise NotImplementedError("TODO: implement hand target peak detection.")
+    # Estimate typical noise/background level
+    typical_level = np.mean(window)
+
+    # Reject weak peaks
+    if peak_strength < peak_ratio * typical_level:
+        return None, difference
+
+    # Convert local index back to full profile index
+    absolute_bin = start_bin + peak_index
+
+    # Convert bin index to meters
+    distance_m = absolute_bin * bin_spacing_m
+
+    return distance_m, difference    
 
 
 def db_scale(values: np.ndarray) -> np.ndarray:
