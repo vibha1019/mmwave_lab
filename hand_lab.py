@@ -92,22 +92,34 @@ def collect_background_profiles(
     expected_range_profile_bytes: int,
 ) -> list[np.ndarray]:
     """Collect empty-scene range profiles before the hand enters the scene."""
-    # TODO: keep reading frames until you have frame_count profiles.
-    # Use read_lab_frame(port, frame_timeout, expected_range_profile_bytes).
-    raise NotImplementedError("TODO: collect N empty-scene background profiles.")
+        profiles = []
 
+    while len(profiles) < frame_count:
+        _, profile = read_lab_frame(
+            port,
+            frame_timeout,
+            expected_range_profile_bytes,
+        )
+        profiles.append(profile)
+
+    return profiles
 
 def make_background(profiles: list[np.ndarray]) -> np.ndarray:
     """Compute one stable background profile from the empty-scene profiles."""
-    # TODO: stack the profiles and compute the median at each range bin.
-    raise NotImplementedError("TODO: compute the median background profile.")
+    stacked = np.stack(profiles, axis=0)
 
+    background = np.median(
+        stacked,
+        axis=0
+    )
+
+    return background
 
 def subtract_background(profile: np.ndarray, background: np.ndarray) -> np.ndarray:
     """Return the positive range-profile change after background subtraction."""
-    # TODO: implement max(profile - background, 0).
-    raise NotImplementedError("TODO: implement positive background subtraction.")
+    difference = profile - background
 
+    return np.maximum(difference, 0)
 
 def smooth_distance(
     history: deque[float],
@@ -120,10 +132,14 @@ def smooth_distance(
 
     history.append(float(distance))
 
-    # TODO: implement both method == "mean" and method == "median".
-    # Think about which one is more reasonable when a single bad peak appears.
-    raise NotImplementedError("TODO: implement mean and median distance smoothing.")
+    if method == "mean":
+        return float(np.mean(history))
 
+    elif method == "median":
+        return float(np.median(history))
+
+    else:
+        raise ValueError(f"Unknown smoothing method: {method}")
 
 def stop_and_drain(port: serial.Serial) -> None:
     """Stop a previous run if it is still streaming binary frames."""
