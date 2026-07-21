@@ -92,7 +92,7 @@ def collect_background_profiles(
     expected_range_profile_bytes: int,
 ) -> list[np.ndarray]:
     """Collect empty-scene range profiles before the hand enters the scene."""
-        profiles = []
+    profiles = []
 
     while len(profiles) < frame_count:
         _, profile = read_lab_frame(
